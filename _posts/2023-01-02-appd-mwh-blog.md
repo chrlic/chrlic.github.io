@@ -57,7 +57,7 @@ In this example, we're going to use AppDynamics native agents and native telemet
 
 Open `my-values.yaml` in your favourite text editor.
 
-1. Find section appdController - fill in appropritate values
+##### 1. Find section appdController - fill in appropritate values
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 appdController:
   host: <instance>.saas.appdynamics.com
@@ -74,9 +74,9 @@ appdController:
   # otelHeaderKey: "xxx" 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2. Delete `openTelemetryCollectors:` section if not using OpenTelemetry and hybrid agent mode
+##### 2. Delete `openTelemetryCollectors:` section if not using OpenTelemetry and hybrid agent mode
    
-3. Specify instrumentation templates for your languages in `instrumentationTemplates` section
+##### 3. Specify instrumentation templates for your languages in `instrumentationTemplates` section
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 instrumentationTemplates:
   - name: Java_Default
@@ -110,7 +110,7 @@ AppDynamics agent needs a help with a few parameters - at least application name
 
 Pls. note we always specify `technology` attribute which simply tells what framework the application uses and which agent type therefore to use. Agent is then delivered by specified `image`.
 
-4. Specify selection rules for auto-instrumentaion
+##### 4. Specify selection rules for auto-instrumentaion
 
 Since on Kubernetes cluster, there are usually many workloads running, where not all of them require agent deployment, there's a need of a mechanism for selection of those workloads, where the agent deployment is needed. Also, we need to provide some hints what kind of technology (Java, .NET, ...) the workload uses and we might have some special requirements related to naming conventions, logging, etc. All this is specified in the `instrumentationRules:` section like this:
 
@@ -148,7 +148,7 @@ In the example above, Deployment like this would match the rules:
 - must have two labels on (pod) template/spec level: `matchLabel` with value containing `java1` and `language` with value containing `java`
 - must have annotation on (pod) template/spec level: `annot1` with any value
 
-5. Deploy the mutating webhook instrumentor using helm
+##### 5. Deploy the mutating webhook instrumentor using helm
 
 Create namespace for the webhook if it does not exist:
 
@@ -162,9 +162,9 @@ Verify, that webhook is running:
 
 `kubectl -n mwh get pods`
 
-![]<../images/mwh/mwh-deployed.png>
+![](<../images/mwh/mwh-deployed.png>)
 
-6. Deploy sample application
+##### 6. Deploy sample application
 
 Now it's time to test the instrumentation. Use your application if you have some, or simply use mine testing Java application using published image like following. 
 
@@ -245,7 +245,7 @@ You should see `Greetings from DownStream!!!` as a response, if empty response i
 
 Application `My-instr-java-app` now should exist in AppDynamics and after a while (1-2 minutes), you should see application flowmap and stats. 
 
-![]<../images/mwh/mwh-appd-fmap.png>
+![](<../images/mwh/mwh-appd-fmap.png>)
 
 Congratulation, if you made it here!
 
