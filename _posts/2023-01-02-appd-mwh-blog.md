@@ -21,17 +21,17 @@ AppDynamics Cluster Agent provides such feature called auto-instrumentation for 
 
 Because AppDynamics Cluster Agent embeds the agents via dynamic changes of application resource definitions (like Deployments), tools like Argo CD detect that and revert the changes to the state defined in the git. Cluster Agent then sees the application ready for instrumentation again, does the injection again – and you get the idea by now – this process can go on forever. Also, Cluster Agent does not support some workload types like CronJobs.  
 
-![](<../images/appd-cluster-agent-auto-instr.drawio.svg>)
+![](<../images/mwh/appd-cluster-agent-auto-instr.drawio.svg>)
 
 Img. 1 – AppDynamics Cluster Agent auto-instrumentation process direct application deployment
 
-![](<../images/appd-cluster-agent-auto-instr-argo.drawio.svg>)
+![](<../images/mwh/appd-cluster-agent-auto-instr-argo.drawio.svg>)
 
 Img. 2 – AppDynamics Cluster Agent auto-instrumentation process with Argo CD
 
 Having multiple customers using AppDynamics and facing those or similar issues, I have been looking for a different way of the entire process. After some experimenting, I decided to approach the problem using a standard Kubernetes extension feature – mutating webhook. Mutating webhooks can be registered to certain resource events in the cluster, among many other events, to pod instantiation event. Then they can implement functionality, which modifies the resource -  pod in our case - before it is created. This avoids the conflicts described above and works well with any kind of resource (except direct Pod deployment via Argo CD, for example, which is rare these days). As a result, I have developed a fully functional solution, published as an open-source project with Cisco Systems permission, and it is currently running in production at scale at multiple customers.  
 
-![](<../images/appd-mwh-auto-instr-argo.drawio.svg>)
+![](<../images/mwh/appd-mwh-auto-instr-argo.drawio.svg>)
 
 Img. 3 – Mutating Webhook-based auto-instrumentation process 
 
@@ -126,8 +126,7 @@ instrumentationRules:
       - annot1: .*
       podNameRegex: .*
     injectionRules:
-      technology: java
-      image: appdynamics/java-agent:latest
+      template: Java_Default
       javaEnvVar: _JAVA_OPTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -162,6 +161,8 @@ Deploy webhook using helm:
 Verify, that webhook is running:
 
 `kubectl -n mwh get pods`
+
+![]<../images/mwh/mwh-deployed.png>
 
 6. Deploy sample application
 
@@ -240,7 +241,11 @@ Now, you can run test calls from browser or using curl:
 
 `curl http://localhost:8282/downstream/hello`
 
+You should see `Greetings from DownStream!!!` as a response, if empty response is returned, wait a few seconds and retry.
+
 Application `My-instr-java-app` now should exist in AppDynamics and after a while (1-2 minutes), you should see application flowmap and stats. 
+
+![]<../images/mwh/mwh-appd-fmap.png>
 
 Congratulation, if you made it here!
 
