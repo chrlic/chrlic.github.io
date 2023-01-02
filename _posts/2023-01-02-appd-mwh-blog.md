@@ -40,7 +40,7 @@ If interested, feel free to use yourselves and here is how.
 How To
 ------
 
-The full project is hosted at ![github.com/cisco-open](<https://github.com/cisco-open/appdynamics-k8s-webhook-instrumentor>) and alternatively available via ![Cisco DevNet Code Exchange](<https://developer.cisco.com/codeexchange/github/repo/cisco-open/appdynamics-k8s-webhook-instrumentor>)
+The full project is hosted at [github.com/cisco-open](<https://github.com/cisco-open/appdynamics-k8s-webhook-instrumentor>) and alternatively available via [Cisco DevNet Code Exchange](<https://developer.cisco.com/codeexchange/github/repo/cisco-open/appdynamics-k8s-webhook-instrumentor>)
 
 Clone the repo: 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,9 +74,9 @@ appdController:
   # otelHeaderKey: "xxx" 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Delete `openTelemetryCollectors:` section if not using OpenTelemetry and hybrid agent mode
+2. Delete `openTelemetryCollectors:` section if not using OpenTelemetry and hybrid agent mode
    
-2. Specify instrumentation template for your languages in `instrumentationTemplates` section
+3. Specify instrumentation templates for your languages in `instrumentationTemplates` section
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 instrumentationTemplates:
   - name: Java_Default
@@ -106,13 +106,13 @@ instrumentationTemplates:
       tierNameSource: auto
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-AppDynamics agent needs a few parameters - at least application name and tier name. `applicationNameSource` attribute tells where to get the application name from. Here we say we take it from Pod label abd the label is `appdApp` as specified by `applicationNameLabel` attribute. `tierNameSource` attribute set to `auto` means that tier name will be derived from resources owning the Pod, which ends up being Deployment or StatefulSet name, for example. 
+AppDynamics agent needs a help with a few parameters - at least application name and tier name. `applicationNameSource` attribute tells where to get the application name from. Here we say - take it from Pod label and the label is `appdApp` as specified by `applicationNameLabel` attribute. `tierNameSource` attribute set to `auto` means that tier name will be derived from resources owning the Pod, which ends up being Deployment or StatefulSet name, for example. 
 
 Pls. note we always specify `technology` attribute which simply tells what framework the application uses and which agent type therefore to use. Agent is then delivered by specified `image`.
 
 4. Specify selection rules for auto-instrumentaion
 
-Since on Kubernetes cluster, there are usually many workloads running, where not all of them require agent deployment, there's needed a mechanism for selection of those workloads, where the agent deployment is needed. Also, we need to provide some hints what kind of technology (Java, .NET, ...) the workload uses and we might have some special requirements related to naming conventions, logging, etc. All this is specified in the `instrumentationRules:` section like this:
+Since on Kubernetes cluster, there are usually many workloads running, where not all of them require agent deployment, there's a need of a mechanism for selection of those workloads, where the agent deployment is needed. Also, we need to provide some hints what kind of technology (Java, .NET, ...) the workload uses and we might have some special requirements related to naming conventions, logging, etc. All this is specified in the `instrumentationRules:` section like this:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 instrumentationRules:
@@ -131,10 +131,10 @@ instrumentationRules:
       javaEnvVar: _JAVA_OPTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Workloads can be selected by multiple criteria and typically, there's more than one instrumentation rule in the real setup. Rules are evaluated sequentially till the first match. Match rules can be specified by `matchRules` attribute on multiple workload attributes:
+Workloads can be selected by multiple criteria and typically, there's more than one instrumentation rule in a real setup. Rules are evaluated sequentially till the first match. Match rules can be specified by `matchRules` attribute on multiple workload attributes:
 
 - namespaceRegex - only workloads in namespaces matching the regexp are instrumented
-- labels - only pods having the labels specified with the values matching the regexp specified in the instrumentation rule are instrumented. When multiple labels are used, all of them must match
+- labels - only pods having the labels with the values matching the regexp specified in the instrumentation rule are instrumented. When multiple labels are used, all of them must match
 - annotations - similar to labels, but using annotations
 - podNameRegex - only pods with name matching the regexp are instrumented
 
@@ -146,8 +146,8 @@ In the example above, Deployment like this would match the rules:
 
 - can be in any namespace
 - can create pod of any name
-- must have two labels on (pod) template/spec level: `matchLabel` with value containing `test1` and `language` with value containing `java`
-- must have annotation on (pod) template/spec level: `annot` with any value
+- must have two labels on (pod) template/spec level: `matchLabel` with value containing `java1` and `language` with value containing `java`
+- must have annotation on (pod) template/spec level: `annot1` with any value
 
 5. Deploy the mutating webhook instrumentor using helm
 
@@ -165,7 +165,7 @@ Verify, that webhook is running:
 
 6. Deploy sample application
 
-Now it's time to test the instrumentation. Use your application if you have some, or you can use mine testig Java application using published image like following. 
+Now it's time to test the instrumentation. Use your application if you have some, or simply use mine testing Java application using published image like following. 
 
 Create resource definition file `d-downstream.yaml` and paste following content into it:
 
@@ -223,9 +223,10 @@ spec:
 save and deploy:
 
 `kubectl create namespace test`
+
 `kubectl -n test apply -f d-downstream.yaml`
 
-Check if pod is running:
+Check if the application pod is running:
 
 `kubectl -n test get pods`
 
@@ -249,4 +250,4 @@ Closing words
 
 It could look like the method provided via mutating webhook brings only benefits. In reality, standard Cluster Agent does a bit more than instrumentation itself. It is, for example, capable of de-instrumentation in case workload starts failing after agent deployment. While this is extremely rare case, it can happen. Mutating webhook instrumentor has no such capability. 
 
-You'll also need Cluster Agent for Kubernetes cluster monitoring itself and in the environments using Infrastructure Based Licensing, it also keeps track of workloads to infrastructure relationships and therefore enables proper book keeping of license consumption in the container platform environments. So, should you decide to use Mutating webhook instrumentor, deploy also Cluster Agent and just do not use it's autoinstrumenation features. 
+Cluster Agent is also needed for Kubernetes cluster monitoring itself and in the environments using Infrastructure Based Licensing, it keeps track of workloads to infrastructure relationships and therefore enables proper bookkeeping of license consumption in the container platform environments. So, should you decide to use Mutating webhook instrumentor, deploy also Cluster Agent and just do not use it's auto-instrumenation features. 
