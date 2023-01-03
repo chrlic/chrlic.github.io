@@ -9,6 +9,7 @@ author:
 
 google_analytics: G-YBV8T6MDDX
 # GitHub Pages / Jekyll configuration
+plugins: [jekyll-paginate]
 baseurl:            ''
 permalink:          /:title/
 paginate:           5
