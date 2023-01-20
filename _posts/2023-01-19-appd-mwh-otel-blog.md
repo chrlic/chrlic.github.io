@@ -1,6 +1,6 @@
-# AppDynamics, OpenTelemetry and Auto-instrumentation 
-
- 
+---
+title: AppDynamics, OpenTelemetry and Auto-instrumentation 
+---
 
 OpenTelemetry is considered a lingua franca of the future for telemetry collection. There are excellent reads on what OpenTelemetry is, so I am not going to do it again, if interested anyway, I suggest reading following: 
 
