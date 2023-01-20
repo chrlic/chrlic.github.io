@@ -2,21 +2,19 @@
 title: AppDynamics, OpenTelemetry and Auto-instrumentation 
 ---
 
-OpenTelemetry is considered a lingua franca of the future for telemetry collection. There are excellent reads on what OpenTelemetry is, so I am not going to do it again, if interested anyway, I suggest reading following: 
+OpenTelemetry is considered a lingua franca of the future for telemetry collection. There are excellent reads on what OpenTelemetry is, so I am not going to do it here, if interested, I suggest reading following: 
 
-https://opentelemetry.io/docs/concepts/what-is-opentelemetry/ 
+[https://opentelemetry.io/docs/concepts/what-is-opentelemetry/](<https://opentelemetry.io/docs/concepts/what-is-opentelemetry/>)
 
-https://opentelemetry.io/docs/collector/ 
+[https://opentelemetry.io/docs/collector/](<https://opentelemetry.io/docs/collector/>)
 
-https://www.appdynamics.com/blog/product/what-is-opentelemetry/ 
-
- 
-
-AppDynamics understands the importance and promises of OpenTelemetry very well, after all, the all new AppDynamics Cloud solution is based on OpenTelemetry signal feeds. Since early 2022, traditional AppDynamics cSaaS (the traditional platform) supports OpenTelemetry, too, though for the time being for traces only.  
+[https://www.appdynamics.com/blog/product/what-is-opentelemetry/](<https://www.appdynamics.com/blog/product/what-is-opentelemetry/>)
 
  
 
-Being an enthusiastic fan of OpenTelemetry for about 2 years now, I started to play with AppDynamics cSaaS and different setups of applications instrumented with OpenTelemetry compliant agents since the initial support. It does not sound complicated at the first look, but there are quite a few options and lots of combinations to try: 
+Cisco and AppDynamics understands the importance and promises of OpenTelemetry very well, after all, the all new AppDynamics Cloud solution is based on OpenTelemetry telemetry feeds. Since early 2022, traditional AppDynamics cSaaS (the traditional platform) supports OpenTelemetry, too, though for the time being for traces only. See the documentation for [AppDynamics for OpenTelemetry](<https://docs.appdynamics.com/appd/23.x/latest/en/application-monitoring/appdynamics-for-opentelemetry>).
+
+Being an enthusiastic fan of OpenTelemetry for about 2 years now, I started to play with AppDynamics cSaaS and different OpenTelemetry deployment scenarios right away. It does not sound complicated at the first look, but there are quite a few options and lots of combinations to try: 
 
 - Agent – AppDynamics Hybrid agents can send native data feed to AppDynamics controller, but also OpenTelemetry feed to OpenTelemetry collector and from there, to any tracing backend application. There are also native OpenTelemetry agents and other 3rd party agents sending tracing data. They are not equal in their capabilities in terms of instrumented frameworks and libraries and in richness of collected data. The first question therefore is – which agent to use? 
 
@@ -26,17 +24,21 @@ Being an enthusiastic fan of OpenTelemetry for about 2 years now, I started to p
 
 ![](<../images/mwh-otel-1/agt-coll-bck-arch.drawio.svg>)
 
-Img 1. -  Architectural options with agents, collectors, and different protocols
+Img 1. -  Architectural options with agents, collectors, and different protocols. 
 
- 
+Dotted items are out of scope of this blog, but I may cover them next time.
+
+## Building the lab, creating a tool
+
 The best learning experience for me is always hands-on. Therefore, I collected some sample applications in Java, .NET / C#, and Javascript / Node.js and started to use different agents, different collector configurations, different backends, and quite quickly, it got completely out of hand – so many combinations, startup scripts, etc. 
 
- 
-Surely, there must be a better way, I thought. Finally, I decided to use Kubernetes to run sample applications as microservices and to expand capabilities of my auto-instrumentation tool for AppDynamics agents described in my [previous blog](</_posts/2023-01-02-appd-mwh-blog.md>) by an ability to also inject another agents, configure them, and run OpenTelemetry collectors in different setups and configurations. Then, each lab scenario is simply described by single `values.yaml` file for Helm deployment, while the application workloads stay the same. Much easier. 
+Surely, there must be a better way, I thought. Finally, I decided to use Kubernetes to run sample applications as microservices and to expand capabilities of my auto-instrumentation tool for AppDynamics agents described in my [previous blog](</appd-mwh-blog>) by an ability to also inject another agents, configure them, and run OpenTelemetry collectors in different setups and configurations. 
+
+Then, each lab scenario is simply described by single `values.yaml` file for Helm deployment, while the application workloads stay the same. Much easier. 
 
 ## Interested in trying yourselves? 
 
-We are going to start with a simple scenario today – one Java microservice, OpenTelemetry collector, and connect it to AppDynamics cSaaS controller. The following diagram shows what we are going to try to achieve. 
+We are going to start with a simple scenario today – one Java microservice, OpenTelemetry collector, and connect it to AppDynamics cSaaS controller. The following diagram shows what we are going to achieve. 
 
 ![](<../images/mwh-otel-1/agt-appd-hybrid.drawio.svg>) 
 
@@ -44,11 +46,11 @@ Img 2. - AppDynamics Hybrid Agent Architecture (Java)
 
 The configuration enabling OpenTelemetry usage is highlighted in green and the diagram shows only the OpenTelemetry related data path, not the native AppDynamics telemetry feed. That goes, as always, from the (Java) agent to AppDynamics controller.
 
-First, follow the download / clone instructions from my previous blog. Once done, download `values-sample-otel.yaml` file from [this gist](<https://gist.github.com/chrlic/967fb9308bd778e570e91a11f7f467f4#file-values-sample-otel-yaml>) and fill in AppDynamics controller connection parameters, including the otelEndpoint and otelHeaderKey values.  
+First, follow the download / clone instructions from my [previous blog](</appd-mwh-blog>). Once done, download `values-sample-otel.yaml` file from [this gist](<https://gist.github.com/chrlic/967fb9308bd778e570e91a11f7f467f4#file-values-sample-otel-yaml>) and fill in AppDynamics controller connection parameters, including the otelEndpoint and otelHeaderKey values.  
 
  
 
-The `otelEndpoint` value is specific per location of your AppDynamics cSaaS controller and can be found here: https://docs.appdynamics.com/appd/23.x/23.1/en/appdynamics-essentials/getting-started/saas-domains-and-ip-ranges 
+The `otelEndpoint` value is specific per location of your AppDynamics cSaaS controller and can be found here: [SaaS Domains And IP Ranges](<https://docs.appdynamics.com/appd/23.x/23.1/en/appdynamics-essentials/getting-started/saas-domains-and-ip-ranges>)
 
  
 
@@ -58,9 +60,9 @@ Look for <…> placeholders to find what needs to be configured.
 
 Now it is time to look at OpenTelemetry collector definition under the `openTelemetryCollectors` section. Each key here represents an OpenTelemetry collector later used in instrumentation rules. In the sample file, you can see three sample definitions with different architectures: 
 
-- collector running as a separate Deployment. It will be deployed by the helm chart. 
+- Collector running as a separate Deployment. It will be deployed by the helm chart. 
 
-- collector running as a sidecar container in individual Pods, which is done alongside with the agent injection automatically 
+- Collector running as a sidecar container in individual Pods, which is done alongside with the agent injection automatically 
 
 - Collector running as an unmanaged entity – on the Kubernetes or elsewhere. We just assume it exists. 
 
@@ -80,7 +82,7 @@ Img 4. - Using OpenTelemetry Collector as a Sidecar
 
  
 
-The specific architecture used is defined by collector `mode` in the Help values file – deployment, sidecar, or external. 
+The specific architecture used is defined by collector `mode` in the Helm values file – deployment, sidecar, or external. 
 
  
 
@@ -123,7 +125,7 @@ instrumentationRules:
 
  
 
-Now, start the mutating webhook instrumentation via Helm – details in the [last blog](</_posts/2023-01-02-appd-mwh-blog.md>), step #5 
+Now, start the mutating webhook instrumentation via Helm – details in the [last blog](</appd-mwh-blog>), step #5 
 
 ` kubectl create namespace mwh` # if you do not have the namespace yet 
 
@@ -135,7 +137,7 @@ Check that the webhook is running:
 
  
 
-Now it is time to deploy some workload – let us use the same application as last time, but slighly different [deployment manifest](<https://gist.github.com/chrlic/967fb9308bd778e570e91a11f7f467f4#file-d-downstream-yaml>)
+Now it is time to deploy some workload – let us use the same application as last time, but slighly different [deployment manifest](<https://gist.github.com/chrlic/967fb9308bd778e570e91a11f7f467f4#file-d-downstream-yaml>) - there are different labels used
  
 
 Once the workload starts, you can test it:
@@ -150,14 +152,14 @@ First, let us have a look if the OpenTelemetry collector started as a sidecar co
 
 `kubectl get pod <pod-name> -o jsonpath='{range .items[*]}{"\n"}{.metadata.name}{"\t"}{.metadata.namespace}{"\t"}{range .spec.containers[*]}{.name}{"=>"}{.image}{","}{end}{end}'|sort|column` 
 
-where <pod-name> is the name of the application pod (something like `downstream-6f8fb4d457-m2gzk`)
+where the `<pod-name>` is the name of the application pod (something like `downstream-6f8fb4d457-m2gzk`)
 
 
-Second, verify that the OpenTelemetry collector started successfully by looking at the log. Since the collector log also contains log exporter with debug enabled, you will see the traces processed by it. Do not use this in production, but here we are in a lab. 
+Second, verify that the OpenTelemetry collector started successfully by looking at the log. Since the collector log also contains log exporter with debug enabled, you will see the traces processed by it. Do not use this in production, but here we are in a lab and it is highly useful. 
 
 `kubectl logs –f <pod-name> -c otel-coll-sidecar` 
 
-Second, once you send some test calls via curl or browser, AppDynamics will create two applications now – one as the native AppDynamics application and a second one with _otel suffix, which is focused more on data ingested via OpenTelemetry. Please take into consideration that for the first time, it takes a bit more time than usual before the _otel application shows up. You should see something like this:
+Once you send some test calls via curl or browser, AppDynamics will create two applications now – one as the native AppDynamics application and a second one with _otel suffix, which is focused more on telemetry data ingested via OpenTelemetry. Please take into consideration that for the first time, it takes a bit more time than usual before the _otel application shows up. You should see something like this:
 
  
 ![](<../images/mwh-otel-1/appd-otel-apps.png>)
