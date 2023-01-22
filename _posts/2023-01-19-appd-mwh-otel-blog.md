@@ -180,7 +180,7 @@ Feel free to experiment, like changing `sidecar-hybrid-agent-default` to ` deplo
 Now, restart the application. What differences do you see in topology on the Kubernetes? Any difference on AppDynamics? 
 
 
-Next time, we will have a look into more complex scenarios.  
+Next time, we will have a look into more complex and useful scenarios.  
 
  
 
