@@ -166,11 +166,11 @@ This data dichotomy is a design choice – while a bit confusing at first, I bel
 
 Since we also installed Jaeger, let’s have a look at how our tracing data looks there. If you run Kubernetes on your laptop like me, it will be available at http://localhost:16686/, or choose your K8S hostname based on your environment. What is in AppDynamics tiers, in Jaeger it is services: 
 
-<img src="../images/mwh-otel-2/jgr-services.png">
+<img src="../images/mwh-otel-2/jgr-services.png" width="70%" height="70%">
 
 If we select the Nginx service, there are Operations available. Operations roughly correspond to Business Transactions in AppDynamics, but it’s not the same. Here we see the “/api/customer” and “/api/vendor” as well as many “module...” operations – that's because the Nginx OpenTelemetry client library monitors many of the typically used Nginx modules internally, too. That’s too much detail for AppDynamics typical use cases, but it may become handy sometimes.  
 
-<img src="../images/mwh-otel-2/jgr-nginx-oper.png">
+<img src="../images/mwh-otel-2/jgr-nginx-oper.png" width="70%" height="70%">
 
 Let’s pick “/api/vendor” and select one trace – the waterfall view appears showing all the spans: 
 
