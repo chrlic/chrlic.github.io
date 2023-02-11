@@ -7,6 +7,7 @@ In my previous blog, we have explored the basic architecture of OpenTelemetry su
 If you looked at the results, I guess you doubtlessly asked – why to use OpenTelemetry at all with AppDynamics, since the native AppDynamics data supply so much more information than what we have from OpenTelemetry. And – you were certainly right – at least in this quite simple scenario. Consider, how AppDynamics hybrid agent generates telemetry data:
 
 ![](<../images/mwh-otel-2/agt-appd-hybrid-det.drawio.svg>)
+
 Img. 1 - AppDynamics Agent and Telemetry Data it Produces, Native and OpenTelemetry. 
 
 Why are the two telemetry data kinds so different in their richness? One of the reasons is that OpenTelemetry support is in the early stages and still under development, so we can expect more on OpenTelemetry side of the things over time. The other reasons, in my opinion more important ones, however, come from different philosophy and architecture of both worlds.  
@@ -24,6 +25,7 @@ To see the value of OpenTelemetry support in AppDynamics cSaaS today, we will fo
 We are going to deploy an application consisting of a Nginx serving a static page as a sample application and working as a reverse proxy to microservices – “customers” and “vendors”, both supplying simple REST API - pretty common use case, especially the reverse proxy function. The application topology looks like this: 
 
 ![](<../images/mwh-otel-2/app-arch-nginx.drawio.svg>)
+
 Img. 2 – Topology of the Sample Application and Telemetry Data Streams  
 
 This is something which could not be done with AppDynamics native agents only, since there is no AppDynamics native agent for Nginx as of today. Actually, one of my customers wanted to monitor Nginx requests like this a while ago and we had to stick to Nginx timeseries metrics only.
@@ -109,7 +111,9 @@ kubectl apply –f app-*.yaml
 After a few seconds, when the application deploys and is instrumented, there will be a simple application available at the URL of Nginx service – in my case, since for the lab and small development I run Kubernetes on Colima on laptop, it is `http://localhost:8765/` - your hostname may be different based on your Kubernetes cluster setup.  
 
 You should see something like this in your browser: 
+
 <img src="../images/mwh-otel-2/api-driver.png" alt= “” width="70%" height="70%">
+
 Img. 3. - API Driver Simple Application 
 
 Now it’s time to run some requests against the application API – there are four API endpoints published for the API driver. Hit the button `Customers & Vendors` and you should see responses from the Nginx shown on the bottom. Let it run for couple of minutes, see what URL’s are sent, have a coffee or tea, stretch your legs. 
@@ -119,6 +123,7 @@ Now it’s time to run some requests against the application API – there are f
 After a few minutes, it's time to look at the results. If you have read my last blog, you already know, there will be two applications created in AppDynamics – one for native AppDynamics telemetry, one for OpenTelemetry based. Let’s look at more detail this time. 
 
 ![](<../images/mwh-otel-2/apps-appd-otel.png>)
+
 Img 4. - Two application for two telemetry data feeds 
 
 Go to the native application first (the one without “_otel” suffix). You should see a flow map like this: 
