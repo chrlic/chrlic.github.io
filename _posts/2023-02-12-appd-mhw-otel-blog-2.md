@@ -52,7 +52,7 @@ git clone https://github.com/cisco-open/appdynamics-k8s-webhook-instrumentor.git
 cd appdynamics-k8s-webhook-instrumentor/buildEnd/helm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-2) Go to this [gist](<[/appd-mwh-blog](https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053)>) with prepared configuration files and manifests. Download the gist as ZIP and save it as gist.zip
+2) Go to this [gist](<https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053>) with prepared configuration files and manifests. Download the gist as ZIP and save it as gist.zip
 
 
 3) Unzip the gist files:   
