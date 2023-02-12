@@ -47,22 +47,17 @@ The goal will be to:
 
 1) Clone the repository with the instrumentator:  
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 git clone https://github.com/cisco-open/appdynamics-k8s-webhook-instrumentor.git
 cd appdynamics-k8s-webhook-instrumentor/buildEnd/helm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-2) Download the gist with prepared configuration files and manifests: 
+2) Go to this [gist](<[/appd-mwh-blog](https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053)>) with prepared configuration files and manifests. Download the gist as ZIP and save it as gist.zip
 
-<script src="https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053.js"></script> 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
-wget –O gist.zip  https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053/archive/baefdb98305a2f4280219f97964ac62511b9d6cf.zip 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
 3) Unzip the gist files:   
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 unzip gist.zip  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
  
