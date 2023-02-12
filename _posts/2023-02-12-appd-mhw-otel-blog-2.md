@@ -20,7 +20,7 @@ When using OpenTelemetry, it’s then often on the collectors or backends to der
 
 ## Do Something We Could Not Do Before
 
-To see the value of OpenTelemetry support in AppDynamics cSaaS today, we will focus on scenarios, where it matters to use OpenTelemetry to our benefit. 
+To see the value of OpenTelemetry support in AppDynamics cSaaS today, we will focus on scenarios, where it matters to use OpenTelemetry to our benefit and what could not have been done before OpenTelemetry support. 
 
 We are going to deploy an application consisting of a Nginx serving a static page as a sample application and working as a reverse proxy to microservices – “customers” and “vendors”, both supplying simple REST API - pretty common use case, especially the reverse proxy function. The application topology looks like this: 
 
