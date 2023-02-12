@@ -86,7 +86,64 @@ appdController:
   otelHeaderKey: "<OpenTelemetry-Key>" 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-See the instrumentation template and rules for Nginx and Apache (yes, we can do Apache HTTPD, too!) 
+See the instrumentation template and rules for Nginx and Apache (yes, we can do Apache HTTPD, too!). The important parts are:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+instrumentationTemplates:
+  - name: Apache_Otel
+    injectionRules:
+      technology: apache/otel
+      image: chrlic/autoinstrumentation-apache-httpd:1.0.2
+      imagePullPolicy: Always
+      applicationNameSource: label
+      applicationNameLabel: appdApp
+      tierNameSource: auto
+      openTelemetryCollector: deployment-hybrid-agent-default
+  - name: Nginx_Otel
+    injectionRules:
+      technology: nginx/otel
+      image: chrlic/autoinstrumentation-apache-httpd:1.0.2
+      imagePullPolicy: Always
+      applicationNameSource: label
+      applicationNameLabel: appdApp
+      tierNameSource: auto
+      openTelemetryCollector: deployment-hybrid-agent-default
+...
+instrumentationRules:
+  - name: apache-otel-test
+    matchRules:
+      namespaceRegex: .*
+      labels:
+      - otel: appd
+      - language: apache
+      podNameRegex: .*
+    injectionRules:
+      template: Apache_Otel
+  - name: nginx-otel-test
+    matchRules:
+      namespaceRegex: .*
+      labels:
+      - otel: appd
+      - language: nginx
+      podNameRegex: .*
+    injectionRules:
+      template: Nginx_Otel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+and the the Nginx deployment, it's just needed to label the pod template with the right labels, `otel: appd` and `language: nginx` in this example:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+  template:
+    metadata:
+      annotations:
+        test: testval
+      labels:
+        app: nginx
+        appdApp: My-instr-java-app
+        otel: appd
+        language: nginx
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
 
 Here we use the results of another OpenTelemetry project – otel-webserver-module (https://github.com/open-telemetry/opentelemetry-cpp-contrib/tree/main/instrumentation/otel-webserver-module) and of the image with the webserver module built according to documentation of OpenTelemetry Operator’s support for auto-instrumentation  of Apache HTTPD (https://github.com/open-telemetry/opentelemetry-operator/tree/main/autoinstrumentation/apache-httpd) . The same image can be used for both Apache HTTPD server and Nginx.
 
@@ -180,6 +237,6 @@ This lab showed how we can use OpenTelemetry to achieve in AppDynamics something
 
 ## What's next?
 
-There’s however one more are to be explored more closely – the Business Transactions / Operations. We have seen that the names found are just “/api/customer” and “/api/vendor” - that’s not very insightful, especially if we know the API structure. Ideally, we would want something like “/api/customer/{custId}/order/{orderId}” etc. Is there a way to get it? This will be the topic for a next blog. 
+There’s however one more are to be explored more closely – the Business Transactions / Operations. We have seen that the names found are just “/api/customer” and “/api/vendor” - that’s not very insightful, especially if we know the API structure. Ideally, we would want something like “/api/customer/{custId}/order/{orderId}” etc. Is there a way to get it? This will be the topic for next time. 
 
  
