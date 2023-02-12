@@ -45,14 +45,14 @@ The goal will be to:
 
 ## How to 
 
-Clone the repository with the instrumentator:  
+1) Clone the repository with the instrumentator:  
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 git clone https://github.com/cisco-open/appdynamics-k8s-webhook-instrumentor.git
 cd appdynamics-k8s-webhook-instrumentor/buildEnd/helm
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Download the gist with prepared configuration files and manifests: 
+2) Download the gist with prepared configuration files and manifests: 
 
 <script src="https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053.js"></script> 
 
@@ -60,19 +60,18 @@ Download the gist with prepared configuration files and manifests:
 wget –O gist.zip  https://gist.github.com/chrlic/ed8be87db25142e87a5f2ed973958053/archive/baefdb98305a2f4280219f97964ac62511b9d6cf.zip 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Unzip the gist files:   
+3) Unzip the gist files:   
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 unzip gist.zip  
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
  
 
-Edit the `values-hybrid.yaml` file – the values for instrumentor Helm chart 
+4) Edit the `values-hybrid.yaml` file – the values for instrumentor Helm chart 
 
 Fill-in the correct information in the following section where there are placeholders (more detail in my earlier blog) 
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 appdController: 
   host: <controller-hostname> 
   port: "443" 
@@ -147,19 +146,19 @@ and the the Nginx deployment, it's just needed to label the pod template with th
 
 Here we use the results of another OpenTelemetry project – otel-webserver-module (https://github.com/open-telemetry/opentelemetry-cpp-contrib/tree/main/instrumentation/otel-webserver-module) and of the image with the webserver module built according to documentation of OpenTelemetry Operator’s support for auto-instrumentation  of Apache HTTPD (https://github.com/open-telemetry/opentelemetry-operator/tree/main/autoinstrumentation/apache-httpd) . The same image can be used for both Apache HTTPD server and Nginx.
 
-Install Jaeger 
+5) Install Jaeger 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 kubectl apply –f d-svc-jaeger.yaml 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Install the instrumentator 
+6) Install the instrumentator 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 helm install --namespace=mwh mwh . --values=values-hybrid.yaml 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
-Install the application 
+7) Install the application 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 kubectl apply –f app-*.yaml 
