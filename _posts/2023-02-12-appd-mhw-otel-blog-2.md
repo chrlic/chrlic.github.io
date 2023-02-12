@@ -209,7 +209,9 @@ Now, let’s go to the OpenTelemetry monitored application – the one with the 
 
 ![](<../images/mwh-otel-2/apps-otel-fm-bt.png>) 
 
-Here we have both business transactions found by Nginx tier as we would expect, since Nginx is the first system our requests hit. (Please disregard the Node.js icon on the left – it's the default for any OTel tier of any kind.)  
+Here we have both business transactions found by Nginx tier as we would expect, since Nginx is the first system our requests hit. (Please disregard the Node.js icon on the left – it's the default for any OTel tier of any kind.)
+
+Also note, there are metrics associated with the business transactions. Business transactions as well as metrics do not come from the agent for OpenTelemetry data - we have seen that the agent produces only traces after all. Metrics, business transactions as well as other data is derived from traces by the AppDynamics OpenTelemetry ingestion service. That's a crucial to understand - should there be a sampling strategy for traces used, metrics will be derived only from the traces received by AppDynamics. There are some clever ways being worked on to eliminate this issue at least to some extent - see [consistent sampling](<https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/consistent-sampling/README.md>) for example.
 
 This data dichotomy is a design choice – while a bit confusing at first, I believe it’s more useful than pretending there’s only one source of data, especially with hybrid agents. For example, you’ll see that the data from hybrid agents are often shifted in time between the native and OTel based metrics. While native data is sent typically every minute, OTel traces come continuously, but are delayed at the source for buffering, at the collector for buffering, then batched and evaluated on the backend for correlation, which adds unpredictable time shifts. So, in my opinion, it’s more honest not to create too much virtual reality here.  
 
@@ -231,6 +233,6 @@ This lab showed how we can use OpenTelemetry to achieve in AppDynamics something
 
 ## What's next?
 
-There’s however one more are to be explored more closely – the Business Transactions / Operations. We have seen that the names found are just “/api/customer” and “/api/vendor” - that’s not very insightful, especially if we know the API structure. Ideally, we would want something like “/api/customer/{custId}/order/{orderId}” etc. Is there a way to get it? This will be the topic for next time. 
+There’s however one more thing to explore more closely – the Business Transactions / Operations. We have seen that the names found are just “/api/customer” and “/api/vendor” - that’s not very insightful, especially if we know the API structure. Ideally, we would want something like “/api/customer/{custId}/order/{orderId}” etc. Is there a way to get it? This will be the topic for next time. 
 
  
