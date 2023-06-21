@@ -1,3 +1,7 @@
+---
+title: Setting up business transactions based on API definition
+---
+
 # Setting up business transactions based on API definition #
 
 If you have been working with AppDynamics for some time, you would probably agree, that the concept of business transactions helps a lot in both getting business relevant data about application performance and stability and in aiding in problem isolation process.  
